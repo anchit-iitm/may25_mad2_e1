@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="post">
+        <label for="name">Name: </label>
+        <input type="text" name="name" id="name">
+        <label for="age">Age: </label>
+        <input type="number" name="age" id="age">
+        <button type="submit">Send</button>
+    </form>
+    <h1>hello world from {{ frontend_name }}, {{ frontend_age }}</h1>
+    {% if frontend_age >= 20 %}
+        {% for i in range(frontend_age) %}
+            <p>p</p>
+            {{ i }}
+        {% endfor %}
+    {% else %}
+        <p>not old enough</p>
+    {% endif %}
+</body>
+</html>
