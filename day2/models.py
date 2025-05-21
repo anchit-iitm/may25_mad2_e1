@@ -35,3 +35,32 @@ class User(db.Model, UserMixin):
                          backref=db.backref('users', lazy='dynamic'))
     
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+
+class Category(db.Model):
+    __tablename__ = 'category'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), unique=True)
+    description = db.Column(db.String(255))
+
+    def get_all(self):
+        all_data = Category.query.all()
+        if not all_data:
+            return False
+        return [
+            {
+                "id": self.id,
+                "name": self.name,
+                "description": self.description
+            } for category in all_data
+        ]
+    
+
+class Product(db.Model):
+    __tablename__ = 'product'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(255), unique=True)
+    description = db.Column(db.String(255))
+    price = db.Column(db.Float)
+    stock = db.Column(db.Integer)
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    category = db.relationship('Category', backref=db.backref('products', lazy='dynamic'))
