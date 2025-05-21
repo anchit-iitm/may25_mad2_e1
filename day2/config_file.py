@@ -9,6 +9,7 @@ class localDevConfig(Config):
     
     SECRET_KEY = 'Shhhhhhh.....its a secret'
     SECURITY_TRACKEABLE = True
+    SECURITY_LOGIN_URL = '/ami_chaina'
 
 
 class deloyConfig(Config):
