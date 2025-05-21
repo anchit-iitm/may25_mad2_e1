@@ -13,7 +13,7 @@ with app.app_context():
 
 '''
 {
-    "key": "value,
+    "key": "value",
     "key2": "value2"
 }
 '''
@@ -39,7 +39,8 @@ def page2():
 @app.route('/page2/<path_name>')
 def page2_path(path_name):
     backend_name = path_name
-    return render_template('page2.html', frontend_name=backend_name)
+    # return render_template('page2.html', frontend_name=backend_name)
+    return {"frontend_name":backend_name}
 
 @app.route('/page3', methods=["GET", "POST"])
 def page3():
