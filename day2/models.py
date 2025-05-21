@@ -41,18 +41,61 @@ class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), unique=True)
     description = db.Column(db.String(255))
+    deleted = db.Column(db.Boolean, default=False)
 
-    def get_all(self):
-        all_data = Category.query.all()
+    def get_all():
+        all_data = Category.query.filter_by(deleted=False).all()
         if not all_data:
             return False
         return [
             {
-                "id": self.id,
-                "name": self.name,
-                "description": self.description
-            } for category in all_data
+                "id": data.id,
+                "name": data.name,
+                "description": data.description
+            }
+            for data in all_data
         ]
+    
+    def get_by_id(id):
+        data = Category.query.filter_by(id=id, deleted=False).first()
+        if not data:
+            return False
+        return {
+            "id": data.id,
+            "name": data.name,
+            "description": data.description
+        }
+    
+    def create(name, description):
+        if Category.query.filter_by(name=name).first():
+            return False
+        data = Category(name=name, description=description)
+        db.session.add(data)
+        db.session.commit()
+        return True
+    
+    def update(id, name, description):
+        data = Category.query.filter_by(id=id, deleted=False).first()
+        if not data:
+            return False
+        data.name = name if name else data.name
+        data.description = description if description else data.description
+        db.session.commit()
+        return True
+    
+    def delete(id):
+        data = Category.query.filter_by(id=id).first()
+        if not data:
+            return 1
+        # Soft delete
+        if data.deleted:
+            data.deleted = False
+            db.session.commit()
+            return 2
+        else:
+            data.deleted = True
+            db.session.commit()
+            return 3
     
 
 class Product(db.Model):

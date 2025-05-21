@@ -80,20 +80,76 @@ def login():
 def test():
     return {"message": "Test route running successfully"}
 
-@app.route('/category/get/all', methods=['GET'])
+@app.route('/category', methods=['GET', 'POST'])
 @auth_required('token')
-def get_all_category():
-    from models import Category
-    data = Category.get_all()
-    if not data:
+def get_category():
+    if request.method == 'POST':
+        from models import Category
+        data = Category.get_all()
+        if not data:
+            return {
+                "error": "No categories found"
+            }, 404
         return {
-            "error": "No categories found"
-        }, 404
-    return {
-        "categories": data
-    }, 200
+            "categories": data
+        }, 200
+    
+    if request.method == 'GET':
+        id = request.json.get('id')
+        if not id:
+            return {
+                "error": "ID is required"
+            }, 400
+        from models import Category
+        data = Category.get_by_id(id)
+        if not data:
+            return {
+                "error": "Category not found"
+            }, 404
+        return {
+            "category": data
+        }, 200  
 
+@app.route('/category/update', methods=['PUT', 'DELETE', 'POST'])
+@auth_required('token')
+@roles_accepted('admin')
+def update_category():
+    from models import Category
+    data = request.json
+    if request.method == 'POST':
+        if Category.create(data.get('name'), data.get('description')):
+            return {
+                "message": "Category created successfully"
+            }, 201
+        else:
+            return {
+                "error": "Category already exists"
+            }, 400
 
+    if request.method == 'PUT':
+        id = data.get('id')
+        if Category.update(id, data.get('name'), data.get('description')):
+            return {
+                "message": "Category updated successfully"
+            }, 200
+        else:
+            return {
+                "error": "Category not found"
+            }, 404
+
+    elif request.method == 'DELETE':
+        if Category.delete(data.get('id')) == 3:
+            return {
+                "message": "Category deleted successfully"
+            }, 201
+        elif Category.delete(data.get('id')) == 2:
+            return {
+                "message": "Category restored successfully"
+            }, 201
+        else:
+            return {
+                "error": "Category not found"
+            }, 404
 
 
 if __name__ == '__main__':
