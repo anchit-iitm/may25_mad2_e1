@@ -35,7 +35,7 @@ def register():
     if not email and not username:
         return {"error": "Email and username is required"}, 400
     
-    if not user_datastore.find_user(email=email) or not user_datastore.find_user(username=username):
+    if user_datastore.find_user(email=email) or user_datastore.find_user(username=username):
         return {"error": "User already exists"}, 400
     
     user_datastore.create_user(email=email, password=password, username=username, roles=["user"])
