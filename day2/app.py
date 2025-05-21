@@ -85,8 +85,12 @@ def test():
 def get_all_category():
     from models import Category
     data = Category.get_all()
+    if not data:
+        return {
+            "error": "No categories found"
+        }, 404
     return {
-        "categories": data if data else "No categories found"
+        "categories": data
     }, 200
 
 
