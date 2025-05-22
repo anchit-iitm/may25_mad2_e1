@@ -1,0 +1,20 @@
+create venv -> python3 -m venv <name for your venv> / python3 -m venv .venv
+
+activate venv -> source <name for your venv>/bin/activate / source .venv/bin/activate / . .venv/bin/activate
+
+printing the list of libraries that is present in the env (global or virtual) -> pip freeze
+
+creating and updating requirements.txt -> pip freeze > requirements.txt
+
+booting up the app -> python3 app.py ( considering you have the terminal in same location as app.py) 
+
+building the db -> same as booting the app, but python3 init_db.py
+
+
+node js installation -> check this website https://nodejs.org/en/download
+
+check if you have node/npm install -> node -v / npm -venv
+
+to install node modules -> npm install
+
+to boot the frontend server -> npm run serve (vue cli) / npm run dev (vite/vuejs doc)
