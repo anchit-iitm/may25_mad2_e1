@@ -88,11 +88,11 @@ class Category(db.Model):
         if not data:
             return 1
         # Soft delete
-        if data.deleted:
+        if data.deleted == True:
             data.deleted = False
             db.session.commit()
             return 2
-        else:
+        elif data.deleted == False:
             data.deleted = True
             db.session.commit()
             return 3

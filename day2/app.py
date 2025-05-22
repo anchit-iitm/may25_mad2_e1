@@ -1,6 +1,6 @@
 from flask import Flask, request
 from flask_security import Security, auth_required, roles_accepted
-
+from flask_restful import Api
 from models import db, user_datastore
 
 
@@ -14,9 +14,17 @@ def create_app():
     db.init_app(init_app)
 
     Security(init_app, user_datastore)
-    return init_app
 
-app = create_app()
+    init_api = Api(init_app, prefix='/api')
+
+    return init_app, init_api
+
+app, api = create_app()
+
+from routes.category import getCategory, updateCategory
+api.add_resource(getCategory, '/category') #localhost:5000/api/category
+api.add_resource(updateCategory, '/category/update')
+
 
 @app.route('/')
 def index():
@@ -80,7 +88,7 @@ def login():
 def test():
     return {"message": "Test route running successfully"}
 
-@app.route('/category', methods=['GET', 'POST'])
+@app.route('/category', methods=['GET', 'POST']) #localhost:5000/category
 @auth_required('token')
 def get_category():
     if request.method == 'POST':

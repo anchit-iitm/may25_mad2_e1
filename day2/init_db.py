@@ -3,7 +3,7 @@ from models import db, user_datastore
 # from flask import current_app as app
 from app import create_app
 
-app = create_app()
+app, _ = create_app()
 
 def register_admin():
     if not user_datastore.find_user(email="admin@abc.com") and user_datastore.find_role("admin"):
